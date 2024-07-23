@@ -149,16 +149,16 @@ class CarInterface(CarInterfaceBase):
     if Params().get_bool("dp_toyota_pcm_compensation"):
       # on stock Toyota this is -2.5
       if candidate in TSS2_CAR:
-        ret.stopAccel = -1.7
+        ret.stopAccel = -1.6
       else:
         ret.stopAccel = -2.0
 
     if candidate in TSS2_CAR:
       tune.kpV = [0.0]
-      tune.kiV = [0.5]
-      ret.vEgoStopping = 0.22
+      tune.kiV = [0.4]
+      ret.vEgoStopping = 0.11
       ret.vEgoStarting = 0.25
-      ret.stoppingDecelRate = 0.1  # reach stopping target smoothly
+      ret.stoppingDecelRate = 0.03  # reach stopping target smoothly
     else:
       tune.kiBP = [0., 5., 35.]
       tune.kiV = [3.6, 2.4, 1.5]
