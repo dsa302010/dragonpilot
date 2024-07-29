@@ -29,8 +29,8 @@ A_CRUISE_MAX_BP = [0., 10.0, 25., 40.]
 CONTROL_N_T_IDX = ModelConstants.T_IDXS[:CONTROL_N]
 
 # Lookup table for turns
-_A_TOTAL_MAX_V = [1.3, 2.8]
-_A_TOTAL_MAX_BP = [20., 40.]
+_A_TOTAL_MAX_V = [1.1, 0.8, 0.4, 0.2]
+_A_TOTAL_MAX_BP = [0., 10.0, 25., 40.]
 
 
 def get_max_accel(v_ego):
