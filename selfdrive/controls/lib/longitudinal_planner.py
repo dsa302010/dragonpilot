@@ -23,14 +23,14 @@ from openpilot.dp_ext.selfdrive.controls.lib.curve_speed_limiter import CurveSpe
 from openpilot.dp_ext.selfdrive.controls.lib.personalized_accel_controller import PersonalizedAccelController
 
 LON_MPC_STEP = 0.2  # first step is 0.2s
-A_CRUISE_MIN = -0.7
-A_CRUISE_MAX_VALS = [1.15, 0.85, 0.4, 0.2]
-A_CRUISE_MAX_BP = [0., 10.0, 25., 40.]
+A_CRUISE_MIN = -0.4
+A_CRUISE_MAX_VALS = [1.15, 1.14, 1.13, 1.12, 1.02, .87, .73, .58, .38, .24, .082]
+A_CRUISE_MAX_BP =   [0.,  1.,  3.,   6.,   8.,    11., 15., 20., 25., 30., 55.]
 CONTROL_N_T_IDX = ModelConstants.T_IDXS[:CONTROL_N]
 
 # Lookup table for turns
-_A_TOTAL_MAX_V = [1.1, 0.8, 0.4, 0.2]
-_A_TOTAL_MAX_BP = [0., 10.0, 25., 40.]
+_A_TOTAL_MAX_V = [1.12, 1.14, 1.12, 1.02, 0.92, .77, .63, .48, .28, .22, .082]
+_A_TOTAL_MAX_BP = [0.,  1.,  3.,   6.,   8.,    11., 15., 20., 25., 30., 55.]
 
 
 def get_max_accel(v_ego):
