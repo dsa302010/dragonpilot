@@ -16,8 +16,8 @@ from openpilot.common.params import Params
 
 SAMPLE_RATE = 48000
 SAMPLE_BUFFER = 4096 # (approx 100ms)
-MAX_VOLUME = 0.05
-MIN_VOLUME = 0.05
+MAX_VOLUME = 0.3
+MIN_VOLUME = 0.1
 CONTROLS_TIMEOUT = 5 # 5 seconds
 FILTER_DT = 1. / (micd.SAMPLE_RATE / micd.FFT_SAMPLES)
 
@@ -29,11 +29,11 @@ AudibleAlert = car.CarControl.HUDControl.AudibleAlert
 
 sound_list: dict[int, tuple[str, int | None, float]] = {
   # AudibleAlert, file name, play count (none for infinite)
-  AudibleAlert.engage: ("engage.wav", 1, MAX_VOLUME),
-  AudibleAlert.disengage: ("disengage.wav", 1, MAX_VOLUME),
-  AudibleAlert.refuse: ("refuse.wav", 1, MAX_VOLUME),
+  AudibleAlert.engage: ("engage.wav", 0.3, MAX_VOLUME),
+  AudibleAlert.disengage: ("disengage.wav", 0.3, MAX_VOLUME),
+  AudibleAlert.refuse: ("refuse.wav", 0.3, MAX_VOLUME),
 
-  AudibleAlert.prompt: ("prompt.wav", 1, MAX_VOLUME),
+  AudibleAlert.prompt: ("prompt.wav", 0.3, MAX_VOLUME),
   AudibleAlert.promptRepeat: ("prompt.wav", None, MAX_VOLUME),
   AudibleAlert.promptDistracted: ("prompt_distracted.wav", None, MAX_VOLUME),
 
