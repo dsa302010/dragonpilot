@@ -23,13 +23,14 @@ from openpilot.dp_ext.selfdrive.controls.lib.curve_speed_limiter import CurveSpe
 from openpilot.dp_ext.selfdrive.controls.lib.personalized_accel_controller import PersonalizedAccelController
 
 LON_MPC_STEP = 0.2  # first step is 0.2s
-A_CRUISE_MIN = -0.6
-A_CRUISE_MAX_VALS = [1.15, 1.14, 1.13, 1.12, 1.02, .87, .73, .58, .45, .41, .28]
+A_CRUISE_MIN = -0.4
+A_CRUISE_MAX_VALS = [1.20, 1.14, 1.13, 1.12, 1.02, .87, .73, .58, .48, .38, .32]
 A_CRUISE_MAX_BP =   [0.,  1.,  3.,   6.,   8.,    11., 15., 20., 25., 30., 55.]
+# CRUISMAX_BP_km =  [0.,  4,   10,   20,   30,    40,  53,  72,  90,  107, 150]
 CONTROL_N_T_IDX = ModelConstants.T_IDXS[:CONTROL_N]
 
 # Lookup table for turns
-_A_TOTAL_MAX_V = [ .95,  .94,  .92,  .82,  .72, .57, .53, .38, .22, .11, .062]
+_A_TOTAL_MAX_V = [1.20, 1.14, 1.13, 1.12, 1.02, .87, .73, .58, .48, .38, .32]
 _A_TOTAL_MAX_BP = [0.,  1.,  3.,   6.,   8.,    11., 15., 20., 25., 30., 55.]
 
 
