@@ -422,6 +422,10 @@ class Controls:
         self.params.put_nonblocking('LongitudinalPersonality', str(self.personality))
         self.events.add(EventName.personalityChanged)
 
+    # AleSato pause steer when MADS and blinker
+    if (self.mem_params.get_bool("AleSato_SteerAlwaysOn") and (CS.vEgo < 50 * CV.KPH_TO_MS) and (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)):
+      self.events.add(EventName.manualSteeringRequired)
+
   def data_sample(self):
     """Receive data from sockets"""
 
@@ -502,8 +506,6 @@ class Controls:
     CC.latActive = (self.active or self.mem_params.get_bool("AleSato_SteerAlwaysOn")) and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
                    (not standstill or self.joystick_mode) and True if not self.mem_params.get_bool("AleSato_SteerAlwaysOn") else \
                    (not CS.vEgo < 50 * CV.KPH_TO_MS) or (not (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)) and CS.vEgo > 5 * CV.KPH_TO_MS
-    if (self.mem_params.get_bool("AleSato_SteerAlwaysOn") and (CS.vEgo < 50 * CV.KPH_TO_MS) and (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)):
-        self.events.add(EventName.manualSteeringRequired)
     CC.longActive = self.enabled and not self.events.contains(ET.OVERRIDE_LONGITUDINAL) and self.CP.openpilotLongitudinalControl
 
     actuators = CC.actuators
