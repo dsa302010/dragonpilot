@@ -9,6 +9,9 @@ from openpilot.common.filter_simple import FirstOrderFilter
 from openpilot.common.stat_live import RunningStatFilter
 from openpilot.common.transformations.camera import DEVICE_CAMERAS
 
+from openpilot.common.params import Params
+mem_params = Params("/dev/shm/params")
+
 EventName = car.OnroadEvent.EventName
 
 # ******************************************************************************************
@@ -403,13 +406,17 @@ class DriverMonitoring:
       driver_state=sm['driverStateV2'],
       cal_rpy=sm['liveCalibration'].rpyCalib,
       car_speed=sm['carState'].vEgo,
-      op_engaged=sm['selfdriveState'].enabled
+      # op_engaged=sm['selfdriveState'].enabled
+      op_engaged=sm['controlsState'].enabled or \
+      (mem_params.get_bool("AleSato_SteerAlwaysOn") and sm['carState'].vEgo > 2),
     )
 
     # Update distraction events
     self._update_events(
       driver_engaged=sm['carState'].steeringPressed or sm['carState'].gasPressed,
-      op_engaged=sm['selfdriveState'].enabled,
+      # op_engaged=sm['selfdriveState'].enabled,
+      op_engaged=sm['controlsState'].enabled or \
+      (mem_params.get_bool("AleSato_SteerAlwaysOn") and sm['carState'].vEgo > 2),
       standstill=sm['carState'].standstill,
       wrong_gear=sm['carState'].gearShifter in [car.CarState.GearShifter.reverse, car.CarState.GearShifter.park],
       car_speed=sm['carState'].vEgo
