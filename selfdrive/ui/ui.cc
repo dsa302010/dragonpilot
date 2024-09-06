@@ -321,7 +321,11 @@ void Device::updateWakefulness(const UIState &s) {
     emit interactiveTimeout();
   }
 
-  setAwake(s.scene.ignition || interactive_timeout > 0);
+  // setAwake(s.scene.ignition || interactive_timeout > 0);
+  // AleSato turn off screen with fog light
+  SubMaster &sm = *(s.sm);
+  bool should_shutdown = Params().getBool("AleSato_ShutdownScreen") && !Params().getBool("ExperimentalMode") && sm["carState"].getCarState().getGenericToggle();
+  setAwake((s.scene.ignition && !should_shutdown) || interactive_timeout > 0);
 }
 
 UIState *uiState() {

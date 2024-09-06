@@ -121,6 +121,14 @@ struct OnroadEvent @0x9b1657f34caf3ad3 {
     espActive @121;
     personalityChanged @122;
 
+
+    # AleSato events
+    manualSteeringRequired @123;
+    steerAlwaysEngageSound @124;
+    steerAlwaysDisengageSound @125;
+    automaticBrakehold @126;
+
+
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
     radarCommIssueDEPRECATED @67;
@@ -421,6 +429,12 @@ struct CarControl {
       prompt @6;
       promptRepeat @7;
       promptDistracted @8;
+
+
+      # AleSato's
+      engageBrakehold @9; # automatic brakehold
+      engageMads @10;
+      disengageMads @11;
     }
   }
 

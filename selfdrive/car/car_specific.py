@@ -37,6 +37,9 @@ class CarSpecificEvents:
     self.no_steer_warning = False
     self.silent_steer_warning = True
 
+    # AleSato stuff
+    self.prevMadsEnabled = False
+
   def update(self, CS: CarStateBase, CS_prev: car.CarState, CC: CarControllerBase, CC_prev: car.CarControl):
     if self.CP.carName in ('body', 'mock'):
       events = Events()
@@ -109,6 +112,14 @@ class CarSpecificEvents:
           if CS.out.vEgo < 0.001:
             # while in standstill, send a user alert
             events.add(EventName.manualRestart)
+      # AleSato's events
+      if not self.prevMadsEnabled and CS.madsEnabled:
+        events.add(EventName.steerAlwaysEngageSound)
+      elif self.prevMadsEnabled and not CS.madsEnabled:
+        events.add(EventName.steerAlwaysDisengageSound)
+      self.prevMadsEnabled = CS.madsEnabled
+      if CS.brakehold_governor:
+        events.add(EventName.automaticBrakehold)
 
     elif self.CP.carName == 'gm':
       # The ECM allows enabling on falling edge of set, but only rising edge of resume

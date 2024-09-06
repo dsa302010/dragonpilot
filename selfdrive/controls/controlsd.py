@@ -59,6 +59,7 @@ ACTUATOR_FIELDS = tuple(car.CarControl.Actuators.schema.fields.keys())
 class Controls:
   def __init__(self, CI=None):
     self.params = Params()
+    self.mem_params = Params("/dev/shm/params")
 
     if CI is None:
       cloudlog.info("controlsd is waiting for CarParams")
@@ -143,6 +144,7 @@ class Controls:
     self.active = False
     self.mismatch_counter = 0
     self.cruise_mismatch_counter = 0
+    self.last_blinker_frame = 0
     self.last_steering_pressed_frame = 0
     self.distance_traveled = 0
     self.last_functional_fan_frame = 0
@@ -406,8 +408,8 @@ class Controls:
       gps_ok = self.sm.recv_frame[self.gps_location_service] > 0 and (self.sm.frame - self.sm.recv_frame[self.gps_location_service]) * DT_CTRL < 2.0
       if not gps_ok and self.sm['livePose'].inputsOK and (self.distance_traveled > 1500):
         self.events.add(EventName.noGps)
-      if gps_ok:
-        self.distance_traveled = 0
+      # if gps_ok:
+      #   self.distance_traveled = 0
       self.distance_traveled += CS.vEgo * DT_CTRL
 
       if self.sm['modelV2'].frameDropPerc > 20:
@@ -497,8 +499,11 @@ class Controls:
 
     # Check which actuators can be enabled
     standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
-    CC.latActive = self.active and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
-                   (not standstill or self.joystick_mode)
+    CC.latActive = (self.active or self.mem_params.get_bool("AleSato_SteerAlwaysOn")) and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
+                   (not standstill or self.joystick_mode) and True if not self.mem_params.get_bool("AleSato_SteerAlwaysOn") else \
+                   (not CS.vEgo < 50 * CV.KPH_TO_MS) or (not (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)) and CS.vEgo > 5 * CV.KPH_TO_MS
+    if (self.mem_params.get_bool("AleSato_SteerAlwaysOn") and (CS.vEgo < 50 * CV.KPH_TO_MS) and (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)):
+        self.events.add(EventName.manualSteeringRequired)
     CC.longActive = self.enabled and not self.events.contains(ET.OVERRIDE_LONGITUDINAL) and self.CP.openpilotLongitudinalControl
 
     actuators = CC.actuators
@@ -641,6 +646,7 @@ class Controls:
     cs.cumLagMs = -self.rk.remaining * 1000.
     cs.forceDecel = bool((self.sm['driverMonitoringState'].awarenessStatus < 0.) or
                          (self.state_machine.state == State.softDisabling))
+    cs.distanceTraveled = self.distance_traveled
 
     lat_tuning = self.CP.lateralTuning.which()
     if self.joystick_mode:
