@@ -89,7 +89,7 @@ void DriverMonitorRenderer::draw(QPainter &painter, const QRect &surface_rect) {
   const int arc_l = 133;
   const float arc_t_default = 6.7f;
   const float arc_t_extend = 12.0f;
-  QColor arc_color = uiState()->engaged() ? DMON_ENGAGED_COLOR : DMON_DISENGAGED_COLOR;
+  QColor arc_color = (uiState()->engaged() || Params("/dev/shm/params").getBool("AleSato_SteerAlwaysOn")) ? DMON_ENGAGED_COLOR : DMON_DISENGAGED_COLOR;
   arc_color.setAlphaF(0.4 * (1.0f - dm_fade_state));
 
   float delta_x = -driver_pose_sins[1] * arc_l / 2.0f;
