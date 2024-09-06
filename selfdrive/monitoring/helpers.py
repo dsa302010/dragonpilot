@@ -407,7 +407,7 @@ class DriverMonitoring:
       cal_rpy=sm['liveCalibration'].rpyCalib,
       car_speed=sm['carState'].vEgo,
       # op_engaged=sm['selfdriveState'].enabled
-      op_engaged=sm['controlsState'].enabled or \
+      op_engaged=sm['selfdriveState'].enabled or \
       (mem_params.get_bool("AleSato_SteerAlwaysOn") and sm['carState'].vEgo > 2),
     )
 
@@ -415,7 +415,7 @@ class DriverMonitoring:
     self._update_events(
       driver_engaged=sm['carState'].steeringPressed or sm['carState'].gasPressed,
       # op_engaged=sm['selfdriveState'].enabled,
-      op_engaged=sm['controlsState'].enabled or \
+      op_engaged=sm['selfdriveState'].enabled or \
       (mem_params.get_bool("AleSato_SteerAlwaysOn") and sm['carState'].vEgo > 2),
       standstill=sm['carState'].standstill,
       wrong_gear=sm['carState'].gearShifter in [car.CarState.GearShifter.reverse, car.CarState.GearShifter.park],
