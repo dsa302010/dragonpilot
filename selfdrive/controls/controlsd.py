@@ -423,7 +423,8 @@ class Controls:
         self.events.add(EventName.personalityChanged)
 
     # AleSato pause steer when MADS and blinker
-    if (self.mem_params.get_bool("AleSato_SteerAlwaysOn") and (CS.vEgo < 50 * CV.KPH_TO_MS) and (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)):
+    if (self.mem_params.get_bool("AleSato_SteerAlwaysOn") and (CS.vEgo < 50 * CV.KPH_TO_MS and CS.vEgo > 1 * CV.KPH_TO_MS)\
+        and (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)):
       self.events.add(EventName.manualSteeringRequired)
 
   def data_sample(self):
