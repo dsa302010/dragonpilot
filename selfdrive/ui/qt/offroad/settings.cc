@@ -189,6 +189,33 @@ void TogglesPanel::updateToggles() {
 
 DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
   setSpacing(50);
+
+  // power buttons
+  QHBoxLayout *power_layout = new QHBoxLayout();
+  power_layout->setSpacing(30);
+
+  QPushButton *reboot_btn = new QPushButton(tr("Reboot"));
+  reboot_btn->setObjectName("reboot_btn");
+  power_layout->addWidget(reboot_btn);
+  QObject::connect(reboot_btn, &QPushButton::clicked, this, &DevicePanel::reboot);
+
+  QPushButton *poweroff_btn = new QPushButton(tr("Power Off"));
+  poweroff_btn->setObjectName("poweroff_btn");
+  power_layout->addWidget(poweroff_btn);
+  QObject::connect(poweroff_btn, &QPushButton::clicked, this, &DevicePanel::poweroff);
+
+  if (!Hardware::PC() and false) {
+    connect(uiState(), &UIState::offroadTransition, poweroff_btn, &QPushButton::setVisible);
+  }
+
+  setStyleSheet(R"(
+    #reboot_btn { height: 120px; border-radius: 15px; background-color: #393939; }
+    #reboot_btn:pressed { background-color: #4a4a4a; }
+    #poweroff_btn { height: 120px; border-radius: 15px; background-color: #E22C2C; }
+    #poweroff_btn:pressed { background-color: #FF2424; }
+  )");
+  addItem(power_layout);
+
   addItem(new LabelControl(tr("Dongle ID"), getDongleId().value_or(tr("N/A"))));
   addItem(new LabelControl(tr("Serial"), params.get("HardwareSerial").c_str()));
 
@@ -258,31 +285,6 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
     }
   });
 
-  // power buttons
-  QHBoxLayout *power_layout = new QHBoxLayout();
-  power_layout->setSpacing(30);
-
-  QPushButton *reboot_btn = new QPushButton(tr("Reboot"));
-  reboot_btn->setObjectName("reboot_btn");
-  power_layout->addWidget(reboot_btn);
-  QObject::connect(reboot_btn, &QPushButton::clicked, this, &DevicePanel::reboot);
-
-  QPushButton *poweroff_btn = new QPushButton(tr("Power Off"));
-  poweroff_btn->setObjectName("poweroff_btn");
-  power_layout->addWidget(poweroff_btn);
-  QObject::connect(poweroff_btn, &QPushButton::clicked, this, &DevicePanel::poweroff);
-
-  if (!Hardware::PC()) {
-    connect(uiState(), &UIState::offroadTransition, poweroff_btn, &QPushButton::setVisible);
-  }
-
-  setStyleSheet(R"(
-    #reboot_btn { height: 120px; border-radius: 15px; background-color: #393939; }
-    #reboot_btn:pressed { background-color: #4a4a4a; }
-    #poweroff_btn { height: 120px; border-radius: 15px; background-color: #E22C2C; }
-    #poweroff_btn:pressed { background-color: #FF2424; }
-  )");
-  addItem(power_layout);
 }
 
 void DevicePanel::updateCalibDescription() {
@@ -352,6 +354,43 @@ void SettingsWindow::setCurrentPanel(int index, const QString &param) {
   }
 }
 
+AlesatoPanel::AlesatoPanel(SettingsWindow *parent) : ListWidget(parent) {
+  auto qrcodeDonateBtn = new ButtonControl(tr("Donate"), "QR-Code",
+                                     tr("AleSato keeps this fork as a hobby, keep it motivated"));
+  auto donatePopup = new MyDonatePopup(this);
+  connect(qrcodeDonateBtn, &ButtonControl::clicked, [=] {
+      donatePopup->exec();
+    });
+  addItem(qrcodeDonateBtn);
+  auto footagePopup = new MyFootagePopup(this);
+  auto qrcodeBtn = new ButtonControl(tr("DashCam footage"), "QR-Code",
+                                     tr("Watch and/or download recordings from comma device cameras"));
+  connect(qrcodeBtn, &ButtonControl::clicked, [=] {
+      footagePopup->exec();
+    });
+  addItem(qrcodeBtn);
+
+  // param, title, desc, icon
+  std::vector<std::tuple<QString, QString, QString, QString>> toggle_defs{
+    {
+      "AleSato_ShutdownScreen",
+      tr("Turn Off the Screen with Fog Light"),
+      tr("When the fog light is lit the comma3 screen will turn off."),
+      "../assets/offroad/bright-brightness-sun-svgrepo-com.svg",
+    },
+    {
+      "AleSato_AutomaticBrakeHold",
+      tr("Automatic Brake Hold"),
+      tr("Activates the car's brakes after 3 seconds stopped (requires activated cruise main)."),
+      "../assets/offroad/brakehold.png",
+    },
+  };
+  for (auto &[param, title, desc, icon] : toggle_defs) {
+    auto toggle = new ParamControl(param, title, desc, icon, this);
+    addItem(toggle);
+  }
+}
+
 SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
 
   // setup two main layouts
@@ -391,6 +430,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {tr("Network"), new Networking(this)},
     {tr("Toggles"), toggles},
     {tr("Software"), new SoftwarePanel(this)},
+    {"Satopilot", new AlesatoPanel(this)},
   };
 
   nav_btns = new QButtonGroup(this);

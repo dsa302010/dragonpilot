@@ -14,6 +14,8 @@
 #include "selfdrive/ui/qt/util.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
 
+#include "selfdrive/ui/qt/widgets/myqrcodes.h" // QrCode
+
 // ********** settings window + top-level panels **********
 class SettingsWindow : public QFrame {
   Q_OBJECT
@@ -98,4 +100,13 @@ private:
 
   Params params;
   ParamWatcher *fs_watch;
+};
+
+class AlesatoPanel : public ListWidget {
+  Q_OBJECT
+public:
+  explicit AlesatoPanel(SettingsWindow *parent);
+
+private:
+  Params params;
 };
