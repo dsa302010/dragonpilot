@@ -698,10 +698,16 @@ struct SelfdriveState {
   alertSize @6 :AlertSize;
   alertType @7 :Text;
   alertSound @8 :Car.CarControl.HUDControl.AudibleAlert;
+  alertHudVisual @12 :Car.CarControl.HUDControl.VisualAlert;
 
   # configurable driving settings
   experimentalMode @10 :Bool;
   personality @11 :LongitudinalPersonality;
+
+
+  # AleSato
+  distanceTraveled @13 :Float32;
+
 
   enum OpenpilotState @0xdbe58b96d2d1ac61 {
     disabled @0;
@@ -726,7 +732,6 @@ struct SelfdriveState {
 }
 
 struct ControlsState @0x97ff69c53601abf1 {
-  cumLagMs @15 :Float32;
   longitudinalPlanMonoTime @28 :UInt64;
   lateralPlanMonoTime @50 :UInt64;
 
@@ -739,9 +744,6 @@ struct ControlsState @0x97ff69c53601abf1 {
   curvature @37 :Float32;  # path curvature from vehicle model
   desiredCurvature @61 :Float32;  # lag adjusted curvatures used by lateral controllers
   forceDecel @51 :Bool;
-
-  # AleSato
-  distanceTraveled @67 :Float32;
 
   lateralControlState :union {
     indiState @52 :LateralINDIState;
@@ -883,6 +885,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   vCruiseDEPRECATED @22 :Float32;  # actual set speed
   vCruiseClusterDEPRECATED @63 :Float32;  # set speed to display in the UI
   startMonoTimeDEPRECATED @48 :UInt64;
+  cumLagMsDEPRECATED @15 :Float32;
 }
 
 struct DrivingModelData {
@@ -1097,6 +1100,14 @@ struct AndroidLogEntry {
   tid @4 :Int32;
   tag @5 :Text;
   message @6 :Text;
+}
+
+struct DriverAssistance {
+  # Lane Departure Warnings
+  leftLaneDeparture @0 :Bool;
+  rightLaneDeparture @1 :Bool;
+
+  # FCW, AEB, etc. will go here
 }
 
 struct LongitudinalPlan @0xe00b5b3eba12876c {
@@ -2345,6 +2356,7 @@ struct Event {
     carControl @23 :Car.CarControl;
     carOutput @127 :Car.CarOutput;
     longitudinalPlan @24 :LongitudinalPlan;
+    driverAssistance @132 :DriverAssistance;
     ubloxGnss @34 :UbloxGnss;
     ubloxRaw @39 :Data;
     qcomGnss @31 :QcomGnss;
