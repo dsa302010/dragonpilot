@@ -46,6 +46,7 @@ class SelfdriveD:
     self.params = Params()
 
     self.mem_params = Params("/dev/shm/params")
+    self.last_blinker_frame = 0
 
     # Ensure the current branch is cached, otherwise the first cycle lags
     build_metadata = get_build_metadata()
@@ -364,7 +365,8 @@ class SelfdriveD:
     if (self.mem_params.get_bool("AleSato_SteerAlwaysOn") and (CS.vEgo < 50 * CV.KPH_TO_MS and CS.vEgo > 1 * CV.KPH_TO_MS)\
         and (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)):
       self.events.add(EventName.manualSteeringRequired)
-
+    if CS.leftBlinker or CS.rightBlinker:
+      self.last_blinker_frame = self.sm.frame
 
   def data_sample(self):
     car_state = messaging.recv_one(self.car_state_sock)
