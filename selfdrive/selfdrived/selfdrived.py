@@ -45,6 +45,8 @@ class SelfdriveD:
   def __init__(self):
     self.params = Params()
 
+    self.mem_params = Params("/dev/shm/params")
+
     # Ensure the current branch is cached, otherwise the first cycle lags
     build_metadata = get_build_metadata()
 
