@@ -13,10 +13,10 @@ def main():
 
   # args
   if len(sys.argv) != 2:
-    sys.exit('usage:\n\nroot@localhost:/data/openpilot$ pkill -f openpilot\n\n\
-             root@localhost:/data/openpilot$ doors.py --lock\n\n\
-             root@localhost:/data/openpilot$ doors.py --unlock\n\n\
-             root@localhost:/data/openpilot$ reboot')
+    sys.exit('usage:\n\nroot@localhost:/data/openpilot$ pkill -f openpilot\n' + \
+            'root@localhost:/data/openpilot$ doors.py --lock\nor\n' + \
+            'root@localhost:/data/openpilot$ doors.py --unlock\n' + \
+            'root@localhost:/data/openpilot$ reboot')
 
   if sys.argv[1]  == '--lock' or sys.argv[1]  == '-l':
     p.can_send(0x750, bytes(unlockCommand), 0)
@@ -26,7 +26,7 @@ def main():
 #    p.can_send(0x750, bytes(lockCommand), 0)
 
   if sys.argv[1] == '--unlock' or sys.argv[1] == '-u':
-    p.can_send(0x750, bytes(lockCommand), 0)
+    # p.can_send(0x750, bytes(lockCommand), 0)
     time.sleep(0.2)
     p.can_send(0x750, bytes(unlockCommand), 0)
 #    p.can_send(0x750, bytes(lockCommand), 0)
@@ -37,4 +37,5 @@ def main():
   p.send_heartbeat()
   print('\n\n\nrelay ON again\nkthxbay\n')
 
-main()
+if __name__ == "__main__":
+  main()

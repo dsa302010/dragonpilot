@@ -81,7 +81,7 @@ mat4 DriverViewWindow::calcFrameMatrix() {
   const float yscale = stream_height * driver_view_ratio / stream_width;
   const float xscale = yscale * glHeight() / glWidth() * stream_width / stream_height;
   return mat4{{
-    -xscale,  0.0, 0.0, 0.0,
+    xscale,  0.0, 0.0, 0.0,
     0.0,  yscale, 0.0, 0.0,
     0.0,  0.0, 1.0, 0.0,
     0.0,  0.0, 0.0, 1.0,
