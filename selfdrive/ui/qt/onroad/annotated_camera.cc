@@ -107,7 +107,7 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   // AleSato stuff
   enginerpm = sm["carState"].getCarState().getEngineRpm();
   engineColorSpeed = enginerpm > 0;
-  float distance_traveled = sm["controlsState"].getSelfdriveState().getDistanceTraveled() / 1000;
+  float distance_traveled = sm["selfdriveState"].getSelfdriveState().getDistanceTraveled() / 1000;
   if(!s.scene.is_metric) {distance_traveled *= KM_TO_MILE;}
   distanceTraveled = distance_traveled;
   buttons->updateState(s);
