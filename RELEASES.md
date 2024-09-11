@@ -4,6 +4,10 @@ Version 0.9.8 (2024-XX-XX)
 
 Version 0.9.7 (2024-06-13)
 ========================
+* AleSato stuff
+  * Change follows distances with long press on distance button (2024-03-13)
+  * Wake up screen in experimental mode if turned off (2024-03-13)
+  * Wake up screen with tap if shutdowned by fog lights (2024-03-03)
 * New driving model
   * Inputs the past curvature for smoother and more accurate lateral control
   * Simplified neural network architecture in the model's last layers
@@ -17,6 +21,10 @@ Version 0.9.7 (2024-06-13)
 
 Version 0.9.6 (2024-02-27)
 ========================
+* AleSato stuff
+  * Use danlee's multilang onroad alerts #28528 (2024-01-23)
+  * Stolen Irene's Toyota: improve longitudinal control #30697 (2024-01-21)
+  * Add QrCode to watch dashcam footage (2023-11-21)
 * New driving model
   * Vision model trained on more data
   * Improved driving performance
@@ -55,6 +63,10 @@ Version 0.9.5 (2023-11-17)
 * Kia Sorento Hybrid 2023 support thanks to sunnyhaibin!
 * Lexus GS F 2016 support thanks to snyperifle!
 * Lexus IS 2023 support thanks to L3R5!
+* Ale Sato
+  * Automatic Brake Hold (2023-09-18)
+  * Lateral Tuning (fix hugg turn cutting) using Pfeiferj's distance based curvature and increased actuator delay (2023-08-10)
+  * Fixed "controls lagging" bug when a engage is requested immediately after activating cruise main (2023-08-02)
 
 Version 0.9.4 (2023-07-27)
 ========================
@@ -71,6 +83,18 @@ Version 0.9.4 (2023-07-27)
 * Bookmarked segments are preserved on the device's storage
 * Ford Focus 2018 support
 * Kia Carnival 2023 support thanks to sunnyhaibin!
+* Ale Sato Stuff:
+  * Show follow distance at carDash (2023-05-12)
+  * Added view footage tks First and ntegan (2023-05-13)
+    Usage: connect to C3 wifi and put 192.168.43.1:5000 at chrome
+  * Added screen shutdown with fog lights (2023-05-05)
+  * Added DrawLockOn by programanIchiro (2023-03-14)
+  * Added a nice blinker indicator, tks OPKR (2023-03-08)
+  * Added grey borders at SteerAlways mode (2023-03-08)
+  * Improved lateral tuning, less hugging (2023-03-08)
+  * Stream Driver at Reverse Gear (2023-03-06)
+  * Fix position of the "TRIP DISTANCE" box (2023-03-06)
+  * Added Horn feedback on remote lockdoors (2023-02-27)
 
 Version 0.9.3 (2023-06-29)
 ========================
