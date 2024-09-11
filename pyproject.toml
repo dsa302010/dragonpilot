@@ -62,6 +62,9 @@ dependencies = [
 
   # logreader
   "zstandard",
+
+  # remotedoorsd
+  "flask",
 ]
 
 [project.optional-dependencies]
