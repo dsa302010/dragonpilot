@@ -34,10 +34,21 @@ def manager_init() -> None:
 
   default_params: list[tuple[str, str | bytes]] = [
     ("CompletedTrainingVersion", "0"),
-    ("DisengageOnAccelerator", "0"),
-    ("GsmMetered", "1"),
+    ("DisengageOnAccelerator", "1"),
+    ("SshEnabled", "1"),
+    ("GithubUsername", "AlexandreSato"),
+    ("GithubSshKeys", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCUfU4ymJdRned22jes0n0qI1vSSreusRsSS1pFcCroGGkfYU1\
+     ZTKuURGtBxcJSw5HEIdWRQfbmdGJBH/k+C1Y3hmgBkbJir+xwp28YeMdT8ZPEIzi6TQdJBee9LplHgxbrOP9M559Copf6lnyJdVQphKPO\
+     l91W/fOgC/xvKeS5v2CNiZCYgAIJsOtgIv1aw+wZVNhPTIda1Sv+6Gj5uk3YBvGcSwSvQBbXORJvaBuJAv0kVL0nLGv8OtQTmNrMsmR17\
+     +lHeVkkfFAaNE3E3QtPCCgpClp5FSbw5SpbYAqVk2MTIjfSGHDzYckT46l63gYHWSIHlqR5peIY/5hPUt6paDLdLwM50s5azwtMqZcZ+x\
+     Y1QEu6wzQDTb+Z2JUm/VtjOmmnRBbXKuDNJ7HKOTvrmZcmbcr3wsTPC8VRHjrxR1TPoTwLYgwonaVlyFwP1W7KPYci6LG9xJraRQ/2W1z\
+     GupzmsoF3Zz5Uz01owrQCCpdRr2mbBSCupZjDgqs6lNhkWPPUEgkbm2t2nPCJyq0E0XjwmE+CrlPaE2SuKN3BJ3OmY46cyrtxmKgGfLxC\
+     +ZXFs10B4A2GCMuZhKm4WjlmfC8pDgr0PBMW/xYPLpYdEuDavPOXG/AViGHZlL0BIviihoZ1YbtuGFq2LTPL2IaM4l02x+Cqb2gztqc4m\
+     CVUGQ=="),
+    ("GsmMetered", "0"),
     ("HasAcceptedTerms", "0"),
-    ("LanguageSetting", "main_en"),
+    ("IsMetric", "1"),
+    ("LanguageSetting", "main_pt-BR"),
     ("OpenpilotEnabledToggle", "1"),
     ("LongitudinalPersonality", str(log.LongitudinalPersonality.standard)),
   ]
