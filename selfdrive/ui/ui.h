@@ -82,6 +82,11 @@ typedef struct UIScene {
   bool started, ignition, is_metric, longitudinal_control;
   bool world_objects_visible = false;
   uint64_t started_frame;
+
+  // Ale Sato blinker indicator
+  int blinkerstatus = 0;
+  int prev_blinkerstatus = 0;
+  int blinkerframe = 0;
 } UIScene;
 
 class UIState : public QObject {

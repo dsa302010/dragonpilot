@@ -170,6 +170,13 @@ static void update_state(UIState *s) {
   }
   scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
 
+  // Ale Sato blinker indicator
+  if (sm.updated("carState")) {
+    auto cs_data = sm["carState"].getCarState();
+    scene.blinkerstatus = cs_data.getLeftBlinker()? 1 : cs_data.getRightBlinker()? 2 : 0;
+  }
+  // End Ale Sato blinker indicator
+
   scene.world_objects_visible = scene.world_objects_visible ||
                                 (scene.started &&
                                  sm.rcv_frame("liveCalibration") > scene.started_frame &&
