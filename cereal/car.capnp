@@ -115,13 +115,14 @@ struct OnroadEvent @0x9b1657f34caf3ad3 {
     actuatorsApiUnavailable @120;
     espActive @121;
     personalityChanged @122;
+    aeb @123;
 
 
     # AleSato events
-    manualSteeringRequired @123;
-    steerAlwaysEngageSound @124;
-    steerAlwaysDisengageSound @125;
-    automaticBrakehold @126;
+    manualSteeringRequired @124;
+    steerAlwaysEngageSound @125;
+    steerAlwaysDisengageSound @126;
+    automaticBrakehold @127;
 
 
     radarCanErrorDEPRECATED @15;

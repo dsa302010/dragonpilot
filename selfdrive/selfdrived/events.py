@@ -319,11 +319,10 @@ def wrong_car_mode_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubM
 
 
 def joystick_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int, personality) -> Alert:
-  # TODO: add some info back
-  #axes = sm['testJoystick'].axes
-  #gb, steer = list(axes)[:2] if len(axes) else (0., 0.)
-  #vals = f"Gas: %1%, Steer: %2%|{round(gb * 100.)},{round(steer * 100.)}"
-  return NormalPermanentAlert("Joystick Mode", "")
+  gb = sm['carControl'].actuators.accel / 4.
+  steer = sm['carControl'].actuators.steer
+  vals = f"Gas: %1%, Steer: %2%|{round(gb * 100.)},{round(steer * 100.)}"
+  return NormalPermanentAlert("Joystick Mode", vals)
 
 def personality_changed_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int, personality) -> Alert:
   personality = str(personality).title()
@@ -386,6 +385,15 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
     ET.PERMANENT: NormalPermanentAlert("Dashcam Mode",
                                        "Car Unrecognized",
                                        priority=Priority.LOWEST),
+  },
+
+  EventName.aeb: {
+    ET.PERMANENT: Alert(
+      "BRAKE!",
+      "Emergency Braking: Risk of Collision",
+      AlertStatus.critical, AlertSize.full,
+      Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 2.),
+    ET.NO_ENTRY: NoEntryAlert("AEB: Risk of Collision"),
   },
 
   EventName.stockAeb: {
