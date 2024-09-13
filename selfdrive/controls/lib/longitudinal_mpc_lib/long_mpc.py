@@ -59,7 +59,7 @@ T_DIFFS = np.diff(T_IDXS, prepend=[0.])
 COMFORT_BRAKE = 2.5
 # STOP_DISTANCE = 6.0
 
-STOP_DISTANCE = 6.75
+STOP_DISTANCE = 6.9
 
 def get_jerk_factor(personality=log.LongitudinalPersonality.standard):
   if personality==log.LongitudinalPersonality.relaxed:

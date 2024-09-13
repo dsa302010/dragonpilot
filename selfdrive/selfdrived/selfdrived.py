@@ -119,7 +119,7 @@ class SelfdriveD:
     # Determine startup event
     self.startup_event = EventName.startup if build_metadata.openpilot.comma_remote and build_metadata.tested_channel else EventName.startupMaster
 
-    self.startup_event = None
+    self.startup_event = EventName.startup
 
     if not car_recognized:
       self.startup_event = EventName.startupNoCar
