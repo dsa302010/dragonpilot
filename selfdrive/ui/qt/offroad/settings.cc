@@ -379,6 +379,12 @@ AlesatoPanel::AlesatoPanel(SettingsWindow *parent) : ListWidget(parent) {
       tr("Activates the car's brakes after 3 seconds stopped (requires activated cruise main)."),
       "../assets/offroad/brakehold.png",
     },
+    {
+      "AleSato_CustomCarApi",
+      tr("Customized Car API"),
+      tr("Use neutral force and a alternative acceleration command for gain PCM compensation forces and mess with permiting brake bit."),
+      "../assets/offroad/icon_settings.png",
+    },
   };
   for (auto &[param, title, desc, icon] : toggle_defs) {
     auto toggle = new ParamControl(param, title, desc, icon, this);

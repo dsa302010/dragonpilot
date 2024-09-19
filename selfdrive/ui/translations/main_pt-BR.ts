@@ -121,6 +121,14 @@
         <source>Activates the car&apos;s brakes after 3 seconds stopped (requires activated cruise main).</source>
         <translation>Após 3 segundos parado você poderá liberar o pé do freio que o carro continurá freiando (exige que o cruise main esteja ativo).</translation>
     </message>
+    <message>
+        <source>Customized Car API</source>
+        <translation>API do Carro Customizada</translation>
+    </message>
+    <message>
+        <source>Use neutral force and a alternative acceleration command for gain PCM compensation forces and mess with permiting brake bit.</source>
+        <translation>Use a força neutra e um comando de aceleração alternativo para ganhar compensação PCM, e mexe com "permit braking" bit.</translation>
+    </message>
 </context>
 <context>
     <name>AnnotatedCameraWidget</name>
@@ -1015,6 +1023,14 @@ Ré</translation>
     </message>
     <message>
         <source>paramsd Temporary Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ensure road ahead is clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Longitudinal Maneuver Mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
