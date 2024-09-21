@@ -1,3 +1,48 @@
+<h1>SatoPilot</h1>
+
+* Super fast takeoff in traffic jams for all car brands
+* QrCode to watch the videos of comma3(X) memory in your smartphone
+* Smooth longitudinal tunning for all car brands (stripped acceleration) for good mileage in high speeds
+* DrawLock on from programanIchiro to detect motorcycles
+* Toyotas TSS2 super good response at takeoff's in uphills
+* Toyotas MADS (lateral only) just with LKAS button
+* Toyotas change experimental/chill mode with short press in distance button
+* Toyotas change follow distance with long press in distance button
+* Toyotas turn the comma3(X) screen off with fog light
+* Toyotas remote un/lock doors using smartphone while engine on
+<br><br>
+<div align="center" style="text-align: center;">
+See the features in action at this video: (https://youtu.be/HZEI8A6YVkA)
+the url for instalation is
+
+```
+https://bit.ly/3HriaWt
+```
+or
+```
+https://smiskol.com/fork/AlexandreSato/personal3
+```
+
+💰 Donate 💰
+---
+
+If you find any of the features useful, feel free to donate to support for future feature development.
+
+Thank you for your continuous love and support! Enjoy 🥰
+
+**PayPal:**
+
+<a href="https://www.paypal.com/donate/?hosted_button_id=JN4E8PTL4QBZG" target="_blank">
+<img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" alt="PayPal this" title="PayPal - The safer, easier way to pay online!" border="0" />
+</a>
+<br></br>
+
+**PayPal QR Code:**
+
+![Paypall.png.png](Paypall.png)
+<br><br><br>
+</div>
+
 <div align="center" style="text-align: center;">
 
 <h1>openpilot</h1>
