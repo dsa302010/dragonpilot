@@ -131,36 +131,14 @@
     </message>
     <message>
         <source>Raise Safety Long Acceleration Limits</source>
-        <translation type="unfinished">Aumente os Limites Aceleração Longitudinal</translation>
+        <translation>Aumente os Limites Aceleração Longitudinal</translation>
     </message>
     <message>
         <source>Force to use safety with raised longitudunal acceleration limits.</source>
         <translation>Forçar o uso de segurança com limites de aceleração longitudinal elevados.</translation>
     </message>
 </context>
-<context>
-    <name>AnnotatedCameraWidget</name>
-    <message>
-        <source>km/h</source>
-        <translation>km/h</translation>
-    </message>
-    <message>
-        <source>mph</source>
-        <translation>mph</translation>
-    </message>
-    <message>
-        <source>MAX</source>
-        <translation>LIMITE</translation>
-    </message>
-    <message>
-        <source>ENGINE RPM</source>
-        <translation>MOTOR RPM</translation>
-    </message>
-    <message>
-        <source>TRIP DIST</source>
-        <translation>DISTÂNCIA</translation>
-    </message>
-</context>
+
 <context>
     <name>ConfirmationDialog</name>
     <message>
@@ -346,6 +324,29 @@
     <message>
         <source>CHILL MODE ON</source>
         <translation>MODO CHILL ON</translation>
+    </message>
+</context>
+<context>
+    <name>HudRenderer</name>
+    <message>
+        <source>km/h</source>
+        <translation>km/h</translation>
+    </message>
+    <message>
+        <source>mph</source>
+        <translation>mph</translation>
+    </message>
+    <message>
+        <source>MAX</source>
+        <translation>LIMITE</translation>
+    </message>
+    <message>
+        <source>ENGINE RPM</source>
+        <translation>MOTOR RPM</translation>
+    </message>
+    <message>
+        <source>TRIP DIST</source>
+        <translation>DISTÂNCIA</translation>
     </message>
 </context>
 <context>

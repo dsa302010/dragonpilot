@@ -6,7 +6,6 @@
 #include <cmath>
 
 #include "common/swaglog.h"
-#include "selfdrive/ui/qt/onroad/buttons.h"
 #include "selfdrive/ui/qt/util.h"
 
 
@@ -77,191 +76,15 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget *par
 }
 
 void AnnotatedCameraWidget::updateState(const UIState &s) {
-  const int SET_SPEED_NA = 255;
-  const SubMaster &sm = *(s.sm);
 
-  const bool cs_alive = sm.alive("carState");
-  const auto cs = sm["controlsState"].getControlsState();
-  const auto car_state = sm["carState"].getCarState();
-
-  is_metric = s.scene.is_metric;
-
-  // Handle older routes where vCruise was in controlsState
-  float v_cruise = car_state.getVCruiseCluster() == 0.0 ? cs.getVCruiseDEPRECATED() : car_state.getVCruiseCluster();
-  setSpeed = cs_alive ? v_cruise : SET_SPEED_NA;
-  is_cruise_set = setSpeed > 0 && (int)setSpeed != SET_SPEED_NA;
-  if (is_cruise_set && !is_metric) {
-    setSpeed *= KM_TO_MILE;
-  }
-
-  // Handle older routes where vEgoCluster is not set
-  v_ego_cluster_seen = v_ego_cluster_seen || car_state.getVEgoCluster() != 0.0;
-  float v_ego = v_ego_cluster_seen ? car_state.getVEgoCluster() : car_state.getVEgo();
-  speed = cs_alive ? std::max<float>(0.0, v_ego) : 0.0;
-  speed *= is_metric ? MS_TO_KPH : MS_TO_MPH;
-
-  speedUnit = is_metric ? tr("km/h") : tr("mph");
-  status = s.status;
-
-
-  // AleSato stuff
-  enginerpm = sm["carState"].getCarState().getEngineRpm();
-  engineColorSpeed = enginerpm > 0;
-  float distance_traveled = sm["selfdriveState"].getSelfdriveState().getDistanceTraveled() / 1000;
-  if(!s.scene.is_metric) {distance_traveled *= KM_TO_MILE;}
-  distanceTraveled = distance_traveled;
+  // Begin AleSato stuff
   buttons->updateState(s);
   // End AleSato stuff
 
   // update engageability/experimental mode button
   experimental_btn->updateState(s);
-
-  // update DM icon
   dmon.updateState(s);
 }
-
-void AnnotatedCameraWidget::drawHud(QPainter &p) {
-  p.save();
-
-  // Header gradient
-  QLinearGradient bg(0, UI_HEADER_HEIGHT - (UI_HEADER_HEIGHT / 2.5), 0, UI_HEADER_HEIGHT);
-  bg.setColorAt(0, QColor::fromRgbF(0, 0, 0, 0.45));
-  bg.setColorAt(1, QColor::fromRgbF(0, 0, 0, 0));
-  p.fillRect(0, 0, width(), UI_HEADER_HEIGHT, bg);
-
-  QString speedStr = QString::number(std::nearbyint(speed));
-  QString setSpeedStr = is_cruise_set ? QString::number(std::nearbyint(setSpeed)) : "–";
-
-  // Draw outer box + border to contain set speed
-  const QSize default_size = {172, 204};
-  QSize set_speed_size = default_size;
-  if (is_metric) set_speed_size.rwidth() = 200;
-
-  QRect set_speed_rect(QPoint(60 + (default_size.width() - set_speed_size.width()) / 2, 45), set_speed_size);
-  p.setPen(QPen(whiteColor(75), 6));
-  p.setBrush(blackColor(166));
-  p.drawRoundedRect(set_speed_rect, 32, 32);
-
-  // Draw MAX
-  QColor max_color = QColor(0x80, 0xd8, 0xa6, 0xff);
-  QColor set_speed_color = whiteColor();
-  if (is_cruise_set) {
-    if (status == STATUS_DISENGAGED) {
-      max_color = whiteColor();
-    } else if (status == STATUS_OVERRIDE) {
-      max_color = QColor(0x91, 0x9b, 0x95, 0xff);
-    }
-  } else {
-    max_color = QColor(0xa6, 0xa6, 0xa6, 0xff);
-    set_speed_color = QColor(0x72, 0x72, 0x72, 0xff);
-  }
-  p.setFont(InterFont(40, QFont::DemiBold));
-  p.setPen(max_color);
-  p.drawText(set_speed_rect.adjusted(0, 27, 0, 0), Qt::AlignTop | Qt::AlignHCenter, tr("MAX"));
-  p.setFont(InterFont(90, QFont::Bold));
-  p.setPen(set_speed_color);
-  p.drawText(set_speed_rect.adjusted(0, 77, 0, 0), Qt::AlignTop | Qt::AlignHCenter, setSpeedStr);
-
-
-  // Begin Ale Sato
-  QString engineRPMStr = engineColorSpeed? QString::number(std::nearbyint(enginerpm)) : "OFF";
-  int my_rect_width = 344;
-  int my_rect_height = 204;
-  int my_top_radius = 32;
-  int my_bottom_radius = 32;
-
-  QRect my_engine_rpm_rect(60, 450, my_rect_width, my_rect_height);
-  p.setPen(QPen(whiteColor(75), 6));
-  p.setBrush(blackColor(166));
-  drawRoundedRect(p, my_engine_rpm_rect, my_top_radius, my_top_radius, my_bottom_radius, my_bottom_radius);
-
-  // Draw colored ENGINE RPM
-  p.setPen(interpColor(
-    enginerpm,
-    {1500, 2100, 3000},
-    {QColor(0x80, 0xd8, 0xa6, 0xff), QColor(0xff, 0xe4, 0xbf, 0xff), QColor(0xff, 0xbf, 0xbf, 0xff)}
-  ));
-  p.setFont(InterFont(40, QFont::DemiBold));
-  p.drawText(my_engine_rpm_rect.adjusted(0, 97, 0, 0), Qt::AlignTop | Qt::AlignCenter, tr("ENGINE RPM"));
-
-  // Draw colored RPM numbers
-  if (engineColorSpeed) {
-    p.setPen(interpColor(
-      enginerpm,
-      {1500, 2100, 3000},
-      {whiteColor(), QColor(0xff, 0x95, 0x00, 0xff), QColor(0xff, 0x00, 0x00, 0xff)}
-    ));
-  } else {
-    p.setPen(QColor(0x72, 0x72, 0x72, 0xff));
-  }
-  p.setFont(InterFont(90, QFont::Bold));
-  p.drawText(my_engine_rpm_rect.adjusted(0, 17, 0, 0), Qt::AlignTop | Qt::AlignHCenter,  engineRPMStr);
-  // End AleSato
-
-// Begin2 Ale Sato
-  char distanceTraveledStr[16];
-  snprintf(distanceTraveledStr, sizeof(distanceTraveledStr), "%.1f", distanceTraveled);
-
-  // Draw outer box + border to contain set speed and speed limit
-  int my2_rect_width = 344;
-  int my2_rect_height = 204;
-  int my2_top_radius = 32;
-  int my2_bottom_radius = 32;
-
-  QRect my_trip_distance_rect(rect().right() - 400, 450, my2_rect_width, my2_rect_height);
-  p.setPen(QPen(whiteColor(75), 6));
-  p.setBrush(blackColor(166));
-  drawRoundedRect(p, my_trip_distance_rect, my2_top_radius, my2_top_radius, my2_bottom_radius, my2_bottom_radius);
-
-  // Draw colored TRIP DIST
-  p.setPen(interpColor(
-    distanceTraveled,
-    {3, 5, 10},
-    {QColor(0xff, 0xbf, 0xbf, 0xff), QColor(0xff, 0xe4, 0xbf, 0xff), QColor(0x80, 0xd8, 0xa6, 0xff)}
-  ));
-  p.setFont(InterFont(40, QFont::DemiBold));
-  p.drawText(my_trip_distance_rect.adjusted(0, 97, 0, 0), Qt::AlignTop | Qt::AlignCenter, tr("TRIP DIST"));
-
-  // Draw trip distance
-  p.setPen(interpColor(
-    distanceTraveled,
-    {3, 5, 10},
-    {QColor(0xff, 0x00, 0x00, 0xff), QColor(0xff, 0x95, 0x00, 0xff), whiteColor()}
-  ));
-  p.setFont(InterFont(90, QFont::Bold));
-  p.drawText(my_trip_distance_rect.adjusted(0, 17, 0, 0), Qt::AlignTop | Qt::AlignHCenter,  distanceTraveledStr);
-  // End2 AleSato
-
-
-  // current speed
-  // p.setFont(InterFont(176, QFont::Bold));
-  p.setFont(InterFont(230, QFont::Bold));
-  // drawText(p, rect().center().x(), 210, speedStr);
-  // Turning the speed blue
-  drawTextWithColor(p, rect().center().x(), 210, speedStr, engineColorSpeed ? whiteColor() : QColor(20, 255, 20, 255));
-  p.setFont(InterFont(66));
-  drawText(p, rect().center().x(), 290, speedUnit, 200);
-
-  p.restore();
-}
-
-void AnnotatedCameraWidget::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
-  QRect real_rect = p.fontMetrics().boundingRect(text);
-  real_rect.moveCenter({x, y - real_rect.height() / 2});
-
-  p.setPen(QColor(0xff, 0xff, 0xff, alpha));
-  p.drawText(real_rect.x(), real_rect.bottom(), text);
-}
-
-
-void AnnotatedCameraWidget::drawTextWithColor(QPainter &p, int x, int y, const QString &text, QColor color) {
-  QRect real_rect = p.fontMetrics().boundingRect(text);
-  real_rect.moveCenter({x, y - real_rect.height() / 2});
-
-  p.setPen(color);
-  p.drawText(real_rect.x(), real_rect.bottom(), text);
-}
-
 
 void AnnotatedCameraWidget::initializeGL() {
   CameraWidget::initializeGL();
@@ -789,8 +612,8 @@ void AnnotatedCameraWidget::paintGL() {
   }
 
   dmon.draw(painter, rect());
-
-  drawHud(painter);
+  hud.updateState(*s);
+  hud.draw(painter, rect());
 
   double cur_draw_t = millis_since_boot();
   double dt = cur_draw_t - prev_draw_t;
