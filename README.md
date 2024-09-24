@@ -2,7 +2,7 @@
 
 * Super fast takeoff in traffic jams for all car brands
 * QrCode to watch the videos of comma3(X) memory in your smartphone
-* Smooth longitudinal tunning for all car brands (stripped acceleration) for good mileage in high speeds
+* Smooth longitudinal tuning for all car brands (stripped acceleration) for good mileage in high speeds
 * DrawLock on from programanIchiro to detect motorcycles
 * Toyotas TSS2 super good response at takeoff's in uphills
 * Toyotas MADS (lateral only) just with LKAS button
@@ -13,7 +13,7 @@
 <br><br>
 <div align="center" style="text-align: center;">
 See the features in action at this video: (https://youtu.be/HZEI8A6YVkA)
-the url for instalation is
+the url for installation is
 
 ```
 https://bit.ly/3HriaWt

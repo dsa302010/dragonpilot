@@ -33,6 +33,9 @@ def manager_init() -> None:
     params.clear_all(ParamKeyType.DEVELOPMENT_ONLY)
 
   default_params: list[tuple[str, str | bytes]] = [
+    ("AleSato_AutomaticBrakeHold", "0"),
+    ("AleSato_CustomCarApi", "1"),
+    ("AleSato_ForceRaiseAccLimits", "0"),
     ("CompletedTrainingVersion", "0"),
     ("DisengageOnAccelerator", "1"),
     ("SshEnabled", "1"),
