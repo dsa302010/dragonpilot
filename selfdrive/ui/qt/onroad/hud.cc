@@ -104,7 +104,7 @@ void HudRenderer::drawSetSpeed(QPainter &p, const QRect &surface_rect) {
   int my_top_radius = 32;
   int my_bottom_radius = 32;
 
-  QRect my_engine_rpm_rect(40, 450, my_rect_width, my_rect_height);
+  QRect my_engine_rpm_rect(20, 450, my_rect_width, my_rect_height);
   p.setPen(QPen(whiteColor(75), 6));
   p.setBrush(blackColor(166));
   drawRoundedRect(p, my_engine_rpm_rect, my_top_radius, my_top_radius, my_bottom_radius, my_bottom_radius);
@@ -142,7 +142,7 @@ void HudRenderer::drawSetSpeed(QPainter &p, const QRect &surface_rect) {
   int my2_top_radius = 32;
   int my2_bottom_radius = 32;
 
-  QRect my_trip_distance_rect(1700, 450, my2_rect_width, my2_rect_height);
+  QRect my_trip_distance_rect(surface_rect.width() - 367, 450, my2_rect_width, my2_rect_height);
   p.setPen(QPen(whiteColor(75), 6));
   p.setBrush(blackColor(166));
   drawRoundedRect(p, my_trip_distance_rect, my2_top_radius, my2_top_radius, my2_bottom_radius, my2_bottom_radius);
