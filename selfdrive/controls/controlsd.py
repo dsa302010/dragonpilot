@@ -92,7 +92,7 @@ class Controls:
     CC.enabled = self.sm['selfdriveState'].enabled
 
     # Check which actuators can be enabled
-    standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
+    standstill = abs(CS.vEgo) <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
     CC.latActive = (self.sm['selfdriveState'].active or self.mem_params.get_bool("AleSato_SteerAlwaysOn")) and not CS.steerFaultTemporary \
                     and not CS.steerFaultPermanent and not standstill and True if not self.mem_params.get_bool("AleSato_SteerAlwaysOn") else \
                     (not CS.vEgo < 50 * CV.KPH_TO_MS) or (not (((self.sm.frame - self.last_blinker_frame) * DT_CTRL) < 1.0)) and CS.vEgo > 5 * CV.KPH_TO_MS
