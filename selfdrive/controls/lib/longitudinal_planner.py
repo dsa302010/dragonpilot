@@ -25,7 +25,7 @@ ALLOW_THROTTLE_THRESHOLD = 0.5
 ACCEL_LIMIT_MARGIN = 0.05
 
 # cgw smooth long tune, dragonpilot
-A_CRUISE_MAX_VALS = [3.0, 1.7, 1.3, 0.7, 0.6, 0.44, 0.32, 0.22, 0.16, 0.0078]
+A_CRUISE_MAX_VALS = [1.13, 1.11, 1.1, 0.85, 0.8, 0.64, 0.52, 0.42, 0.36, 0.178]
 A_CRUISE_MAX_BP =   [0.,  3,   6.,  8.,  11., 15.,  20.,  25.,  30.,  55.]
 A_CRUISE_MIN_VALS = [-0.65,  -0.60,  -0.70, -0.70,  -0.65, -0.65]
 A_CRUISE_MIN_BP =   [0.,     0.07,   10.,   20.,    30.,   55.]
