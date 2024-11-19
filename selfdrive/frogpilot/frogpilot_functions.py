@@ -8,7 +8,7 @@ import tarfile
 import time
 
 from openpilot.common.basedir import BASEDIR
-from openpilot.common.params_pyx import Params, ParamKeyType, UnknownKeyName
+from openpilot.common.params_pyx import ParamKeyType, UnknownKeyName
 from openpilot.common.time import system_time_valid
 from openpilot.system.hardware import HARDWARE
 
@@ -42,7 +42,7 @@ def backup_directory(backup, destination, success_message, fail_message, minimum
         print("Backup already exists. Aborting.")
         return
 
-      run_cmd(["sudo", "rsync", "-avq", os.path.join(backup, ".")], in_progress_destination, success_message, fail_message)
+      run_cmd(["sudo", "rsync", "-avq", os.path.join(backup, "."), in_progress_destination], success_message, fail_message)
       with tarfile.open(in_progress_compressed_backup, "w:gz") as tar:
         tar.add(in_progress_destination, arcname=os.path.basename(destination))
 
@@ -120,7 +120,7 @@ def backup_toggles(params, params_storage):
     if params.get_key_type(key) & ParamKeyType.FROGPILOT_STORAGE:
       value = params.get(key)
       if value is not None:
-        params_storage.put(key, value)
+        params_storage.put_nonblocking(key, value)
 
   backup_path = os.path.join("/data", "toggle_backups")
   maximum_backups = 10
