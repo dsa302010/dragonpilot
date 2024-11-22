@@ -11,17 +11,10 @@ from openpilot.common.basedir import BASEDIR
 from openpilot.common.params import Params
 
 from openpilot.selfdrive.frogpilot.assets.download_functions import GITHUB_URL, GITLAB_URL, download_file, get_repository_url, handle_error, handle_request_error, verify_download
-from openpilot.selfdrive.frogpilot.frogpilot_functions import MODELS_PATH
 from openpilot.selfdrive.frogpilot.frogpilot_utilities import delete_file
+from openpilot.selfdrive.frogpilot.frogpilot_variables import DEFAULT_MODEL, DEFAULT_MODEL_NAME, DEFAULT_CLASSIC_MODEL, DEFAULT_CLASSIC_MODEL_NAME, MODELS_PATH
 
 VERSION = "v10"
-
-DEFAULT_MODEL = "dragon-rider"
-DEFAULT_MODEL_NAME = "Dragon Rider"
-
-DEFAULT_CLASSIC_MODEL = "north-dakota"
-DEFAULT_CLASSIC_MODEL_NAME = "North Dakota (Default)"
-
 
 class ModelManager:
   def __init__(self):

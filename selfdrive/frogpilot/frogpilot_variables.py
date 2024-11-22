@@ -7,6 +7,7 @@ import time
 from types import SimpleNamespace
 
 from cereal import car
+from openpilot.common.basedir import BASEDIR
 from openpilot.common.conversions import Conversions as CV
 from openpilot.common.numpy_fast import clip, interp
 from openpilot.common.params import Params, UnknownKeyName
@@ -15,9 +16,6 @@ from openpilot.selfdrive.modeld.constants import ModelConstants
 from openpilot.system.hardware.power_monitoring import VBATT_PAUSE_CHARGING
 from openpilot.system.version import get_build_metadata
 from panda import ALTERNATIVE_EXPERIENCE
-
-from openpilot.selfdrive.frogpilot.assets.model_manager import DEFAULT_CLASSIC_MODEL, DEFAULT_CLASSIC_MODEL_NAME
-from openpilot.selfdrive.frogpilot.frogpilot_functions import MODELS_PATH
 
 params = Params()
 params_memory = Params("/dev/shm/params")
@@ -32,11 +30,26 @@ PLANNER_TIME = ModelConstants.T_IDXS[MODEL_LENGTH - 1]  # Length of time the mod
 THRESHOLD = 0.6                                         # 60% chance of condition being true
 TO_RADIANS = math.pi / 180                              # Conversion factor from degrees to radians
 
+ACTIVE_THEME_PATH = os.path.join(BASEDIR, "selfdrive", "frogpilot", "assets", "active_theme")
+MODELS_PATH = os.path.join("/data", "models")
+RANDOM_EVENTS_PATH = os.path.join(BASEDIR, "selfdrive", "frogpilot", "assets", "random_events")
+THEME_SAVE_PATH = os.path.join("/data", "themes")
+
+DEFAULT_MODEL = "dragon-rider"
+DEFAULT_MODEL_NAME = "Dragon Rider"
+
+DEFAULT_CLASSIC_MODEL = "north-dakota"
+DEFAULT_CLASSIC_MODEL_NAME = "North Dakota (Default)"
+
 def get_frogpilot_toggles():
   while True:
     toggles = params.get("FrogPilotToggles")
     if toggles is not None:
-      return SimpleNamespace(**json.loads(toggles))
+      try:
+        return SimpleNamespace(**json.loads(toggles))
+      except Exception as e:
+        print(f"Unexpected error while retrieving toggles: {e}, value: {toggles}")
+        time.sleep(0.1)
     time.sleep(0.1)
 
 def has_prime():
