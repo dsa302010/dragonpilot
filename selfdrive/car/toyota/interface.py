@@ -140,15 +140,15 @@ class CarInterface(CarInterfaceBase):
     if ret.enableGasInterceptor:
       tune.kiBP = [0., 5., 20.]
       tune.kiV = [1.3, 1.0, 0.7]
-      ret.vEgoStopping = 0.25
+      ret.vEgoStopping = 0.11
       ret.vEgoStarting = 0.25
-      ret.stoppingDecelRate = 0.3  # reach stopping target smoothly
+      ret.stoppingDecelRate = 0.03  # reach stopping target smoothly
     elif candidate in TSS2_CAR:
       tune.kpV = [0.0]
       tune.kiV = [0.5]
-      ret.vEgoStopping = 0.25
+      ret.vEgoStopping = 0.11
       ret.vEgoStarting = 0.25
-      ret.stoppingDecelRate = 0.3  # reach stopping target smoothly
+      ret.stoppingDecelRate = 0.03  # reach stopping target smoothly
 
       # Since we compensate for imprecise acceleration in carcontroller, we can be less aggressive with tuning
       # This also prevents unnecessary request windup due to internal car jerk limits
@@ -159,8 +159,8 @@ class CarInterface(CarInterfaceBase):
       tune.kiV = [3.6, 2.4, 1.5]
 
     if params.get_bool("FrogsGoMoosTweak"):
-      ret.stoppingDecelRate = 0.1  # reach stopping target smoothly
-      ret.vEgoStopping = 0.15
+      ret.stoppingDecelRate = 0.03  # reach stopping target smoothly
+      ret.vEgoStopping = 0.11
       ret.vEgoStarting = 0.15
 
     return ret
