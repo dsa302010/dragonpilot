@@ -157,9 +157,9 @@ class CarInterface(CarInterfaceBase):
       ret.vEgoStarting = 0.25
       ret.stoppingDecelRate = 0.3  # reach stopping target smoothly
     elif candidate in TSS2_CAR:
-      ret.vEgoStopping = 0.25
-      ret.vEgoStarting = 0.25
-      ret.stoppingDecelRate = 0.3  # reach stopping target smoothly
+      ret.vEgoStopping = 0.11
+      ret.vEgoStarting = 0.15
+      ret.stoppingDecelRate = 0.03  # reach stopping target smoothly
 
       # Hybrids have much quicker longitudinal actuator response
       if ret.flags & ToyotaFlags.HYBRID.value:
@@ -167,7 +167,7 @@ class CarInterface(CarInterfaceBase):
 
     if params.get_bool("FrogsGoMoosTweak"):
       ret.stoppingDecelRate = 0.1  # reach stopping target smoothly
-      ret.vEgoStopping = 0.15
+      ret.vEgoStopping = 0.11
       ret.vEgoStarting = 0.15
 
     return ret
