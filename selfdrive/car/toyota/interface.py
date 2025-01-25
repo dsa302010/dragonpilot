@@ -147,7 +147,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.flags |= ToyotaFlags.RAISED_ACCEL_LIMIT.value
 
-    ret.vEgoStopping = 0.09
+    ret.vEgoStopping = 0.11
     ret.vEgoStarting = 0.25
     ret.stoppingDecelRate = 0.02  # reach stopping target smoothly
 
