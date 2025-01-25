@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 from cereal import car
 from openpilot.common.filter_simple import FirstOrderFilter
