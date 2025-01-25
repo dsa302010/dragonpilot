@@ -575,7 +575,7 @@ class FrogPilotVariables:
     toggle.frogsgomoo_tweak = openpilot_longitudinal and car_make == "toyota" and (params.get_bool("FrogsGoMoosTweak") if tuning_level >= level["FrogsGoMoosTweak"] else default.get_bool("FrogsGoMoosTweak"))
     toggle.kiBP = kiBP
     toggle.kiV = kiV
-    toggle.stoppingDecelRate = 0.015 if toggle.frogsgomoo_tweak else stoppingDecelRate
+    toggle.stoppingDecelRate = 0.02 if toggle.frogsgomoo_tweak else stoppingDecelRate
     toggle.vEgoStopping = 0.11 if toggle.frogsgomoo_tweak else vEgoStopping
     toggle.vEgoStarting = 0.15 if toggle.frogsgomoo_tweak else vEgoStarting
 
