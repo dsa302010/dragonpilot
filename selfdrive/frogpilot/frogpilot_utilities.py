@@ -67,8 +67,8 @@ def calculate_lane_width(lane, current_lane, road_edge):
   lane_y_interp = np.interp(current_x, np.array(lane.x), np.array(lane.y))
   road_edge_y_interp = np.interp(current_x, np.array(road_edge.x), np.array(road_edge.y))
 
-  distance_to_lane = np.mean(np.abs(current_y - lane_y_interp))
-  distance_to_road_edge = np.mean(np.abs(current_y - road_edge_y_interp))
+  distance_to_lane = np.median(np.abs(current_y - lane_y_interp))
+  distance_to_road_edge = np.median(np.abs(current_y - road_edge_y_interp))
 
   return float(min(distance_to_lane, distance_to_road_edge))
 
@@ -130,44 +130,51 @@ def is_url_pingable(url, timeout=10):
   return False
 
 def lock_doors(lock_doors_timer, sm):
-  while any(proc.name == "dmonitoringd" and proc.running for proc in sm["managerState"].processes):
-    time.sleep(DT_HW)
-    sm.update()
+  try:
+    while any(proc.name == "dmonitoringd" and proc.running for proc in sm["managerState"].processes):
+      time.sleep(DT_HW)
+      sm.update()
 
-  params.put_bool("IsDriverViewEnabled", True)
+    params.put_bool("IsDriverViewEnabled", True)
 
-  while not any(proc.name == "dmonitoringd" and proc.running for proc in sm["managerState"].processes):
-    time.sleep(DT_HW)
-    sm.update()
+    while not any(proc.name == "dmonitoringd" and proc.running for proc in sm["managerState"].processes):
+      time.sleep(DT_HW)
+      sm.update()
 
-  start_time = time.monotonic()
-  while True:
-    elapsed_time = time.monotonic() - start_time
-    if elapsed_time >= lock_doors_timer:
-      break
+    start_time = time.monotonic()
+    while True:
+      elapsed_time = time.monotonic() - start_time
+      if elapsed_time >= lock_doors_timer:
+        break
 
-    if any(ps.ignitionLine or ps.ignitionCan for ps in sm["pandaStates"] if ps.pandaType != log.PandaState.PandaType.unknown):
-      params.remove("IsDriverViewEnabled")
-      return
+      if any(ps.ignitionLine or ps.ignitionCan for ps in sm["pandaStates"] if ps.pandaType != log.PandaState.PandaType.unknown):
+        params.remove("IsDriverViewEnabled")
+        return
 
-    if sm["driverMonitoringState"].faceDetected or not sm.alive["driverMonitoringState"]:
-      start_time = time.monotonic()
+      if sm["driverMonitoringState"].faceDetected or not sm.alive["driverMonitoringState"]:
+        start_time = time.monotonic()
 
-    time.sleep(DT_DMON)
-    sm.update()
+      time.sleep(DT_DMON)
+      sm.update()
 
-  panda = Panda()
-  panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
-  panda.can_send(0x750, LOCK_CMD, 0)
-  panda.set_safety_mode(panda.SAFETY_TOYOTA)
-  panda.send_heartbeat()
+    panda = Panda()
+    panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
+    panda.can_send(0x750, LOCK_CMD, 0)
+    panda.set_safety_mode(panda.SAFETY_TOYOTA)
+    panda.send_heartbeat()
 
-  params.remove("IsDriverViewEnabled")
+    params.remove("IsDriverViewEnabled")
+  except Exception as error:
+    sentry.capture_exception(error)
 
 def run_cmd(cmd, success_message, fail_message):
   try:
-    subprocess.check_call(cmd)
+    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     print(success_message)
+  except subprocess.CalledProcessError as error:
+    print(f"Command failed with return code {error.returncode}")
+    print(f"Error Output: {error.stderr.strip()}")
+    sentry.capture_exception(error)
   except Exception as error:
     print(f"Unexpected error occurred: {error}")
     print(fail_message)
@@ -178,6 +185,11 @@ def update_maps(now):
     time.sleep(60)
 
   maps_selected = json.loads(params.get("MapsSelected", encoding="utf-8") or "{}")
+
+  if isinstance(maps_selected, int):
+    params.remove("MapsSelected")
+    return
+
   if not (maps_selected.get("nations") or maps_selected.get("states")):
     return
 

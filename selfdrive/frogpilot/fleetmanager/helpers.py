@@ -503,18 +503,24 @@ def capture_tmux_log():
     raise Exception(f"Error capturing tmux log: {e}")
 
 def lock_doors():
-  panda = Panda()
-  panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
-  panda.can_send(0x750, LOCK_CMD, 0)
-  panda.set_safety_mode(panda.SAFETY_TOYOTA)
-  panda.send_heartbeat()
+  try:
+    panda = Panda()
+    panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
+    panda.can_send(0x750, LOCK_CMD, 0)
+    panda.set_safety_mode(panda.SAFETY_TOYOTA)
+    panda.send_heartbeat()
+  except Exception as error:
+    sentry.capture_exception(error)
 
 def unlock_doors():
-  panda = Panda()
-  panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
-  panda.can_send(0x750, UNLOCK_CMD, 0)
-  panda.set_safety_mode(panda.SAFETY_TOYOTA)
-  panda.send_heartbeat()
+  try:
+    panda = Panda()
+    panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
+    panda.can_send(0x750, UNLOCK_CMD, 0)
+    panda.set_safety_mode(panda.SAFETY_TOYOTA)
+    panda.send_heartbeat()
+  except Exception as error:
+    sentry.capture_exception(error)
 
 def reboot_device():
   HARDWARE.reboot()
