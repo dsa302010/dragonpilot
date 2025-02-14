@@ -828,10 +828,6 @@ Deactivate only occurs with the &apos;Cruise Control&apos; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Control with LKAS Button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Enable with Cruise Control</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1053,6 +1049,10 @@ Deactivate only occurs with the &apos;Cruise Control&apos; button.</source>
     </message>
     <message>
         <source>Instant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable with LKAS Button</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2874,6 +2874,18 @@ Want to submit your own animations? Share them in the &apos;custom-themes&apos; 
     </message>
     <message>
         <source>MANAGE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock Doors On Ignition Off After</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically lock the doors after the car&apos;s ignition has been turned off and no one is detected in either of the front seats.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
