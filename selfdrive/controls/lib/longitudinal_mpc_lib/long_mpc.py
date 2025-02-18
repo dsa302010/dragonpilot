@@ -77,7 +77,7 @@ def get_jerk_factor(aggressive_jerk_acceleration=0.5, aggressive_jerk_danger=0.5
     elif personality==log.LongitudinalPersonality.standard:
       return 1.0, 1.0, 1.0
     elif personality==log.LongitudinalPersonality.aggressive:
-      return 0.5, 0.5, 0.5
+      return 1.0, 1.0, 1.0
     else:
       raise NotImplementedError("Longitudinal personality not supported")
 
@@ -104,6 +104,31 @@ def get_T_FOLLOW(aggressive_follow=1.25, standard_follow=1.45, relaxed_follow=1.
 
 def get_stopped_equivalence_factor(v_lead):
   return (v_lead**2) / (2 * COMFORT_BRAKE)
+
+def get_stopped_equivalence_factor_krkeegen(v_lead, v_ego):
+  v_diff_offset_max = 12  # Max additional offset distance
+  delta_speed = v_lead - v_ego  # Relative speed of lead vs. ego
+
+  v_diff_offset = np.zeros_like(delta_speed)  # Ensures proper shape
+
+  mask = delta_speed > 0  # Only apply logic when lead is pulling away
+
+  if np.any(mask):
+    # 🔧 **進一步降低低速加速度響應**
+    scaling_factor = np.interp(v_ego, [0, 11, 22], [0.3, 0.4, 0.2])
+    
+    # 進一步限制 delta_speed 影響，讓起步更溫和
+    delta_speed_limited = np.clip(delta_speed, 0, 1.0)  
+
+    v_diff_offset[mask] = delta_speed_limited[mask] * scaling_factor
+    v_diff_offset = np.clip(v_diff_offset, 0, v_diff_offset_max)
+
+    # 🔧 **進一步降低低速時的自車速度影響**
+    ego_scaling = np.interp(v_ego, [0, 11, 20], [0.3, 0.35, 0.2])
+    v_diff_offset *= ego_scaling
+
+  stopping_distance = (v_lead**2) / (2 * COMFORT_BRAKE) + v_diff_offset
+  return stopping_distance
 
 def get_safe_obstacle_distance(v_ego, t_follow):
   return (v_ego**2) / (2 * COMFORT_BRAKE) + t_follow * v_ego + STOP_DISTANCE
